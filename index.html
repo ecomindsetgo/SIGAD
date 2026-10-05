@@ -3,17 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#781d2a">
   <title>SIGAD · Archivo Desconcentrado</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/app.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script defer src="js/vendor-jszip.min.js"></script>
+  <script defer src="js/app.js"></script>
 </head>
 <body>
 <div class="app-shell">
   <aside class="sidebar" id="sidebar">
     <div class="brand">
-      <div class="brand-mark">AD</div>
+      <img src="assets/logo-pj.png" alt="Poder Judicial">
       <div><strong>SIGAD</strong><span>Archivo Desconcentrado</span></div>
     </div>
     <nav class="nav">
@@ -29,37 +35,40 @@
       <a class="nav-item external" href="https://saamir.ecomindsetgo.com" target="_blank" rel="noopener"><span>▣</span>SAAMIR <b>↗</b></a>
       <a class="nav-item external" href="https://samicert.ecomindsetgo.com" target="_blank" rel="noopener"><span>✓</span>SAMICERT <b>↗</b></a>
     </nav>
-    <div class="sidebar-foot">SIGAD v0.1 · Base inicial</div>
+    <div class="sidebar-foot"><span class="dot local"></span><span id="storageStatus">Modo local seguro</span><small>SIGAD v0.2</small></div>
   </aside>
 
   <main class="main">
     <header class="topbar">
       <button class="menu-btn" id="menuBtn">☰</button>
-      <div><h1 id="pageTitle">Dashboard</h1><p id="pageSub">Sistema Integral de Gestión del Archivo Desconcentrado</p></div>
-      <div class="user-chip"><span class="status-dot"></span><span>Archivo Desconcentrado</span></div>
+      <div class="top-title"><h1 id="pageTitle">Dashboard</h1><p id="pageSub">Sistema Integral de Gestión del Archivo Desconcentrado</p></div>
+      <div class="top-actions"><button class="ghost" id="btnBackup">Respaldo</button><div class="user-chip"><span class="status-dot"></span><span>Archivo Desconcentrado</span></div></div>
     </header>
 
     <section class="view active" id="view-dashboard">
       <div class="hero">
-        <div><span class="eyebrow">CORTE SUPERIOR DE JUSTICIA DEL SANTA</span><h2>Centro de gestión del Archivo Desconcentrado</h2><p>Acceso unificado a los nuevos módulos de gestión y a SAAMIR / SAMICERT.</p></div>
-        <div class="hero-actions"><button class="primary" data-go="devoluciones">Nuevo oficio</button></div>
+        <div><span class="eyebrow">CORTE SUPERIOR DE JUSTICIA DEL SANTA</span><h2>Centro de gestión del Archivo Desconcentrado</h2><p>Gestión operativa, trazabilidad, reportes y acceso unificado a SAAMIR y SAMICERT.</p></div>
+        <div class="hero-actions"><button class="primary" data-go="devoluciones">+ Nuevo oficio</button></div>
       </div>
       <div class="stats" id="stats"></div>
       <div class="grid-2">
-        <article class="panel"><div class="panel-head"><h3>Módulos operativos</h3></div><div class="module-grid" id="moduleGrid"></div></article>
-        <article class="panel"><div class="panel-head"><h3>Actividad reciente</h3></div><div id="recentActivity" class="timeline"></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Módulos operativos</h3><p>Acceso rápido a cada proceso.</p></div></div><div class="module-grid" id="moduleGrid"></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Actividad reciente</h3><p>Últimas acciones registradas.</p></div></div><div id="recentActivity" class="timeline"></div></article>
       </div>
-      <article class="panel integrated-panel"><div class="panel-head"><div><h3>Sistemas integrados</h3><p>Primera fase: acceso seguro mediante enlaces a sus dominios actuales.</p></div></div><div class="integrated-grid"><a class="system-card" href="https://saamir.ecomindsetgo.com" target="_blank" rel="noopener"><div class="system-icon">S</div><div><strong>SAAMIR</strong><span>Recepción, tarjetas, inventario y trazabilidad</span></div><b>↗</b></a><a class="system-card" href="https://samicert.ecomindsetgo.com" target="_blank" rel="noopener"><div class="system-icon">C</div><div><strong>SAMICERT</strong><span>Visto bueno, certificación, firma y verificación</span></div><b>↗</b></a></div></article>
+      <div class="grid-2">
+        <article class="panel"><div class="panel-head"><div><h3>Observaciones frecuentes</h3><p>Acumulado de devoluciones registradas.</p></div></div><div id="obsRanking" class="bars"></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Sistemas integrados</h3><p>Fase 1: acceso directo conservando sus plataformas actuales.</p></div></div><div class="integrated-grid"><a class="system-card" href="https://saamir.ecomindsetgo.com" target="_blank" rel="noopener"><div class="system-icon">S</div><div><strong>SAAMIR</strong><span>Recepción, tarjetas y trazabilidad</span></div><b>↗</b></a><a class="system-card" href="https://samicert.ecomindsetgo.com" target="_blank" rel="noopener"><div class="system-icon">C</div><div><strong>SAMICERT</strong><span>VB, certificación, firma y verificación</span></div><b>↗</b></a></div></article>
+      </div>
     </section>
 
     <section class="view" id="view-devoluciones">
-      <div class="view-toolbar"><div><h2>Devolución de cargos</h2><p>Registro estructurado y generación del oficio institucional.</p></div><div class="toolbar-actions"><button class="secondary" id="btnHistory">Historial</button><button class="primary" id="btnNew">+ Nuevo oficio</button></div></div>
-      <div class="stepper"><span class="active">1 Datos</span><span>2 Dependencias</span><span>3 Observaciones</span><span>4 Vista previa</span></div>
-      <form id="officeForm" class="form-layout">
+      <div class="view-toolbar"><div><h2>Devolución de cargos</h2><p>Registro estructurado, observaciones y generación del oficio institucional.</p></div><div class="toolbar-actions"><button class="secondary" id="btnHistory">Historial</button><button class="primary" id="btnNew">+ Nuevo oficio</button></div></div>
+      <div class="stepper"><span class="active">1 Datos</span><span>2 Dependencias</span><span>3 Observaciones</span><span>4 Documento</span></div>
+      <form id="officeForm" class="form-layout" autocomplete="off">
         <article class="panel">
-          <div class="panel-head"><h3>Datos del oficio</h3><span class="badge">Automatizable</span></div>
+          <div class="panel-head"><div><h3>Datos del oficio</h3><p>El correlativo sugerido se calcula con el historial del año.</p></div><span class="badge">Automático</span></div>
           <div class="form-grid">
-            <label>N.° de oficio<input id="officeNumber" placeholder="003-2026-OAD-CSJSA/PJ" required></label>
+            <label>N.° de oficio<div class="input-action"><input id="officeNumber" required><button type="button" class="mini" id="btnSuggestNumber">Sugerir</button></div></label>
             <label>Fecha del oficio<input id="officeDate" type="date" required></label>
             <label>Destinatario<input id="recipient" placeholder="Nombre completo" required></label>
             <label>Cargo / dependencia<input id="recipientRole" placeholder="Administrador / dependencia" required></label>
@@ -72,44 +81,111 @@
         </article>
 
         <article class="panel">
-          <div class="panel-head"><div><h3>Dependencias y cantidades</h3><p>El sistema suma paquetes y expedientes automáticamente.</p></div><button type="button" class="secondary small" id="addDependency">+ Agregar</button></div>
+          <div class="panel-head"><div><h3>Dependencias y cantidades</h3><p>Los totales se actualizan en tiempo real.</p></div><button type="button" class="secondary small" id="addDependency">+ Agregar</button></div>
           <div class="table-wrap"><table><thead><tr><th>#</th><th>Juzgado / dependencia</th><th>Paquetes</th><th>Expedientes</th><th></th></tr></thead><tbody id="dependencyRows"></tbody><tfoot><tr><td colspan="2">TOTAL</td><td id="totalPackages">0</td><td id="totalFiles">0</td><td></td></tr></tfoot></table></div>
         </article>
 
         <article class="panel">
-          <div class="panel-head"><div><h3>Expedientes observados</h3><p>Registra solo las incidencias que se devolverán u observarán.</p></div><button type="button" class="secondary small" id="addObservation">+ Agregar</button></div>
+          <div class="panel-head"><div><h3>Expedientes observados</h3><p>Puede registrar manualmente, pegar desde Excel o importar un archivo.</p></div><div class="toolbar-actions"><button type="button" class="secondary small" id="btnPasteObs">Pegar desde Excel</button><label class="secondary small file-btn">Importar Excel<input type="file" id="obsFile" accept=".xlsx,.xls,.csv"></label><button type="button" class="secondary small" id="addObservation">+ Agregar</button></div></div>
           <div class="table-wrap"><table class="wide"><thead><tr><th>#</th><th>Dependencia</th><th>N.° expediente</th><th>Folios</th><th>Tipo</th><th>Observación</th><th></th></tr></thead><tbody id="observationRows"></tbody></table></div>
         </article>
 
         <article class="panel">
-          <div class="panel-head"><div><h3>Paquetes observados</h3><p>Para casos donde la observación corresponde al paquete completo.</p></div><button type="button" class="secondary small" id="addPackageObservation">+ Agregar</button></div>
+          <div class="panel-head"><div><h3>Paquetes observados</h3><p>Para observaciones que correspondan al paquete completo.</p></div><button type="button" class="secondary small" id="addPackageObservation">+ Agregar</button></div>
           <div class="table-wrap"><table><thead><tr><th>#</th><th>Dependencia</th><th>Código de paquete</th><th>Folios</th><th>Observación</th><th></th></tr></thead><tbody id="packageObservationRows"></tbody></table></div>
         </article>
 
         <article class="panel summary-panel">
           <div class="summary-cards"><div><span>Paquetes</span><strong id="sumPackages">0</strong></div><div><span>Expedientes</span><strong id="sumFiles">0</strong></div><div><span>Exp. observados</span><strong id="sumObs">0</strong></div><div><span>Paq. observados</span><strong id="sumPackObs">0</strong></div></div>
-          <div class="form-actions"><button type="button" class="secondary" id="btnSaveDraft">Guardar borrador</button><button type="button" class="primary" id="btnPreview">Generar vista previa</button></div>
+          <div class="form-actions"><button type="button" class="secondary" id="btnSaveDraft">Guardar borrador</button><button type="button" class="primary" id="btnPreview">Generar documento</button></div>
         </article>
       </form>
-      <div id="historyPanel" class="panel hidden"><div class="panel-head"><h3>Historial de oficios</h3><button class="secondary small" id="closeHistory">Cerrar</button></div><div id="historyList"></div></div>
+      <div id="historyPanel" class="panel hidden"><div class="panel-head"><div><h3>Historial de oficios</h3><p>Abra, duplique o elimine registros.</p></div><button class="secondary small" id="closeHistory">Cerrar</button></div><div id="historyList"></div></div>
     </section>
 
-    <section class="view placeholder" id="view-archivo360"><div class="empty-state"><span>⌖</span><h2>Archivo 360</h2><p>Siguiente módulo: mapa 2D interactivo de Sáenz Peña, NCPP–Sótano, López Padilla y Dunas.</p><div class="tag-row"><span>Repositorio</span><span>Sector</span><span>Estantería</span><span>Nivel</span><span>Rango</span></div></div></section>
-    <section class="view placeholder" id="view-transferencias"><div class="empty-state"><span>⇄</span><h2>Transferencias al Gobierno Regional</h2><p>Registro de fechas, cantidad de paquetes, metros lineales, documentación y estado del proceso.</p></div></section>
-    <section class="view placeholder" id="view-eliminacion"><div class="empty-state"><span>⌫</span><h2>Eliminación documental</h2><p>Registro estadístico de jornadas: paquetes, metros lineales, fechas, repositorios y documentos sustentatorios.</p></div></section>
-    <section class="view placeholder" id="view-reportes"><div class="empty-state"><span>▤</span><h2>Reportes</h2><p>Consolidado mensual/anual, exportación PDF/Excel y reportes por módulo.</p></div></section>
-    <section class="view placeholder" id="view-auditoria"><div class="empty-state"><span>◴</span><h2>Auditoría</h2><p>Registro transversal de usuario, fecha, hora, acción y cambios realizados.</p></div></section>
-    <section class="view placeholder" id="view-asistente"><div class="empty-state"><span>✦</span><h2>Asistente SIGAD</h2><p>Consultas estructuradas sin API de pago sobre la data registrada en SIGAD.</p></div></section>
+    <section class="view" id="view-archivo360">
+      <div class="view-toolbar"><div><h2>Archivo 360</h2><p>Ubicación lógica de paquetes por repositorio y rangos configurables.</p></div><button class="primary" id="btnAddRange">+ Registrar rango</button></div>
+      <article class="search-hero"><div><span class="eyebrow">LOCALIZADOR</span><h3>¿Dónde se encuentra el paquete?</h3></div><div class="search-box"><input id="packageSearch" placeholder="Ej.: 14572R o 26-458"><button id="btnPackageSearch" class="primary">Buscar</button></div></article>
+      <div id="locationResult"></div>
+      <div class="repo-grid" id="repoGrid"></div>
+      <article class="panel"><div class="panel-head"><div><h3>Rangos configurados</h3><p>Base del motor de ubicación. Se puede ampliar luego a pasillo, estantería y nivel.</p></div></div><div id="rangeList"></div></article>
+    </section>
+
+    <section class="view" id="view-transferencias">
+      <div class="view-toolbar"><div><h2>Transferencias al Gobierno Regional</h2><p>Registro de gestión, cantidades, metros lineales, periodo y estado.</p></div><button class="primary" id="btnNewTransfer">+ Nueva transferencia</button></div>
+      <div class="stats mini-stats" id="transferStats"></div>
+      <article class="panel"><div class="panel-head"><div><h3>Registro de transferencias</h3><p>No duplica expedientes: conserva información de gestión.</p></div></div><div id="transferList"></div></article>
+    </section>
+
+    <section class="view" id="view-eliminacion">
+      <div class="view-toolbar"><div><h2>Eliminación documental</h2><p>Registro estadístico de jornadas y procesos de eliminación.</p></div><button class="primary" id="btnNewElimination">+ Nuevo registro</button></div>
+      <div class="stats mini-stats" id="eliminationStats"></div>
+      <article class="panel"><div class="panel-head"><div><h3>Historial de eliminación</h3><p>Cantidad de paquetes, metros lineales, fechas y repositorios.</p></div></div><div id="eliminationList"></div></article>
+    </section>
+
+    <section class="view" id="view-reportes">
+      <div class="view-toolbar"><div><h2>Reportes</h2><p>Consolidados de gestión y exportación de datos.</p></div><div class="toolbar-actions"><button class="secondary" id="btnExportCsv">Exportar consolidado CSV</button><button class="primary" id="btnPrintReport">Imprimir reporte</button></div></div>
+      <div id="reportContent"></div>
+    </section>
+
+    <section class="view" id="view-auditoria">
+      <div class="view-toolbar"><div><h2>Auditoría</h2><p>Trazabilidad transversal de operaciones realizadas en SIGAD.</p></div><button class="secondary" id="btnExportAudit">Exportar CSV</button></div>
+      <article class="panel"><div class="filter-row"><input id="auditSearch" placeholder="Buscar acción o detalle"><select id="auditLimit"><option value="50">50 registros</option><option value="100">100 registros</option><option value="500">500 registros</option></select></div><div id="auditList"></div></article>
+    </section>
+
+    <section class="view" id="view-asistente">
+      <div class="view-toolbar"><div><h2>Asistente SIGAD</h2><p>Consultas gratuitas basadas en los registros de esta plataforma.</p></div></div>
+      <div class="assistant-layout"><article class="panel assistant-panel"><div id="assistantMessages" class="assistant-messages"></div><div class="assistant-input"><input id="assistantQuery" placeholder="Ej.: ¿Cuántos paquetes hemos eliminado este año?"><button id="btnAsk" class="primary">Consultar</button></div><div class="suggestions"><button>¿Cuántos oficios se generaron?</button><button>¿Cuántos paquetes se transfirieron?</button><button>¿Cuántos metros lineales se eliminaron?</button><button>¿Dónde está el paquete 14572R?</button></div></article><article class="panel"><div class="panel-head"><h3>Qué puede consultar</h3></div><div class="capability-list"><span>Oficios y cargos</span><span>Paquetes y expedientes registrados</span><span>Observaciones frecuentes</span><span>Transferencias</span><span>Eliminaciones y metros lineales</span><span>Ubicación por rangos de Archivo 360</span></div></article></div>
+    </section>
   </main>
 </div>
 
 <div class="modal" id="previewModal" aria-hidden="true">
   <div class="modal-card modal-xl">
-    <div class="modal-head"><div><h3>Vista previa del oficio</h3><p>Revisa antes de generar o imprimir.</p></div><button id="closePreview" class="icon-btn">×</button></div>
+    <div class="modal-head"><div><h3>Documento generado</h3><p>Revise la vista previa antes de registrar como definitivo.</p></div><button id="closePreview" class="icon-btn">×</button></div>
+    <div class="document-toolbar"><button id="btnWord" class="secondary">Descargar Word (.docx)</button><button id="btnPdf" class="secondary">Descargar PDF</button><button id="btnPrint" class="secondary">Imprimir</button><button id="btnFinalize" class="primary">Registrar como generado</button></div>
     <div id="officePreview" class="paper"></div>
-    <div class="modal-actions"><button id="btnPrint" class="secondary">Imprimir / Guardar PDF</button><button id="btnDownloadHtml" class="secondary">Descargar HTML</button><button id="btnFinalize" class="primary">Guardar como generado</button></div>
   </div>
 </div>
-<script src="js/app.js"></script>
+
+<div class="modal" id="pasteModal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-head"><div><h3>Pegar observaciones desde Excel</h3><p>Copie filas con: Dependencia · N.° expediente · Folios · Observación.</p></div><button class="icon-btn modal-close">×</button></div>
+    <textarea id="pasteArea" class="paste-area" placeholder="JIP-01\t01757-2022-85-2501-JR-PE-01\t135\tNO ESTA EN LISTADO REMITIDO"></textarea>
+    <div class="modal-actions"><button class="secondary modal-close">Cancelar</button><button class="primary" id="btnProcessPaste">Procesar filas</button></div>
+  </div>
+</div>
+
+<div class="modal" id="rangeModal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-head"><div><h3>Registrar rango de ubicación</h3><p>Puede empezar por repositorio y ampliar después a sector, estantería y nivel.</p></div><button class="icon-btn modal-close">×</button></div>
+    <div class="form-grid"><label>Repositorio<select id="rangeRepo"><option>Sáenz Peña</option><option>NCPP - Sótano</option><option>López Padilla</option><option>Dunas</option></select></label><label>Formato / prefijo<input id="rangePrefix" placeholder="R, 26-, AT, AD"></label><label>Desde<input id="rangeFrom" placeholder="1"></label><label>Hasta<input id="rangeTo" placeholder="13100"></label><label>Sector<input id="rangeSector" placeholder="Opcional"></label><label>Estantería<input id="rangeShelf" placeholder="Opcional"></label><label>Nivel<input id="rangeLevel" placeholder="Opcional"></label><label>Descripción<input id="rangeDescription" placeholder="Ej. Serie R"></label></div>
+    <div class="modal-actions"><button class="secondary modal-close">Cancelar</button><button class="primary" id="btnSaveRange">Guardar rango</button></div>
+  </div>
+</div>
+
+<div class="modal" id="transferModal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-head"><div><h3>Nueva transferencia</h3><p>Registro de gestión para transferencia documental.</p></div><button class="icon-btn modal-close">×</button></div>
+    <div class="form-grid"><label>Fecha<input id="trDate" type="date"></label><label>Destino<input id="trDestination" value="Gobierno Regional de Áncash"></label><label>Cantidad de paquetes<input id="trPackages" type="number" min="0"></label><label>Metros lineales<input id="trMeters" type="number" min="0" step="0.01"></label><label>Periodo documental<input id="trPeriod" placeholder="1998 - 2004"></label><label>Estado<select id="trStatus"><option>Planificada</option><option>Inventariada</option><option>Verificada</option><option>Programada</option><option>Transferida</option><option>Acta registrada</option><option>Finalizada</option></select></label><label class="span-2">Documento / referencia<input id="trReference" placeholder="Acta, oficio o informe"></label><label class="span-2">Observaciones<textarea id="trNotes" rows="3"></textarea></label></div>
+    <div class="modal-actions"><button class="secondary modal-close">Cancelar</button><button class="primary" id="btnSaveTransfer">Guardar</button></div>
+  </div>
+</div>
+
+<div class="modal" id="eliminationModal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-head"><div><h3>Nuevo registro de eliminación</h3><p>Solo información estadística y documental del proceso.</p></div><button class="icon-btn modal-close">×</button></div>
+    <div class="form-grid"><label>Fecha<input id="elDate" type="date"></label><label>Cantidad de paquetes<input id="elPackages" type="number" min="0"></label><label>Metros lineales<input id="elMeters" type="number" min="0" step="0.01"></label><label>Periodo documental<input id="elPeriod" placeholder="1995 - 2001"></label><label class="span-2">Repositorios involucrados<input id="elRepos" placeholder="López Padilla, Dunas"></label><label>Participantes<input id="elParticipants" type="number" min="0"></label><label>Estado<select id="elStatus"><option>Programada</option><option>En ejecución</option><option>Concluida</option></select></label><label class="span-2">Documento sustentatorio<input id="elReference" placeholder="Acta / informe / resolución"></label><label class="span-2">Observaciones<textarea id="elNotes" rows="3"></textarea></label></div>
+    <div class="modal-actions"><button class="secondary modal-close">Cancelar</button><button class="primary" id="btnSaveElimination">Guardar</button></div>
+  </div>
+</div>
+
+<div class="modal" id="backupModal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-head"><div><h3>Respaldo y migración</h3><p>Exporte toda la información local o restaure un respaldo.</p></div><button class="icon-btn modal-close">×</button></div>
+    <div class="backup-actions"><button class="primary" id="btnExportBackup">Descargar respaldo JSON</button><label class="secondary file-btn">Restaurar respaldo<input type="file" id="backupFile" accept=".json"></label></div>
+    <div class="notice"><strong>Firebase preparado, no activado.</strong><p>La versión incluye estructura de reglas y configuración de ejemplo. Para uso multiusuario se debe crear/configurar el proyecto Firebase de SIGAD y publicar sus reglas.</p></div>
+  </div>
+</div>
 </body>
 </html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SIGAD · Archivo Desconcentrado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">AD</div>
+      <div><strong>SIGAD</strong><span>Archivo Desconcentrado</span></div>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-view="dashboard"><span>▦</span>Dashboard</button>
+      <button class="nav-item" data-view="devoluciones"><span>✉</span>Devolución de cargos</button>
+      <button class="nav-item" data-view="archivo360"><span>⌖</span>Archivo 360</button>
+      <button class="nav-item" data-view="transferencias"><span>⇄</span>Transferencias</button>
+      <button class="nav-item" data-view="eliminacion"><span>⌫</span>Eliminación documental</button>
+      <button class="nav-item" data-view="reportes"><span>▤</span>Reportes</button>
+      <button class="nav-item" data-view="auditoria"><span>◴</span>Auditoría</button>
+      <button class="nav-item" data-view="asistente"><span>✦</span>Asistente</button>
+      <div class="nav-label">Sistemas integrados</div>
+      <a class="nav-item external" href="https://saamir.ecomindsetgo.com" target="_blank" rel="noopener"><span>▣</span>SAAMIR <b>↗</b></a>
+      <a class="nav-item external" href="https://samicert.ecomindsetgo.com" target="_blank" rel="noopener"><span>✓</span>SAMICERT <b>↗</b></a>
+    </nav>
+    <div class="sidebar-foot">SIGAD v0.1 · Base inicial</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div><h1 id="pageTitle">Dashboard</h1><p id="pageSub">Sistema Integral de Gestión del Archivo Desconcentrado</p></div>
+      <div class="user-chip"><span class="status-dot"></span><span>Archivo Desconcentrado</span></div>
+    </header>
+
+    <section class="view active" id="view-dashboard">
+      <div class="hero">
+        <div><span class="eyebrow">CORTE SUPERIOR DE JUSTICIA DEL SANTA</span><h2>Centro de gestión del Archivo Desconcentrado</h2><p>Acceso unificado a los nuevos módulos de gestión y a SAAMIR / SAMICERT.</p></div>
+        <div class="hero-actions"><button class="primary" data-go="devoluciones">Nuevo oficio</button></div>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="grid-2">
+        <article class="panel"><div class="panel-head"><h3>Módulos operativos</h3></div><div class="module-grid" id="moduleGrid"></div></article>
+        <article class="panel"><div class="panel-head"><h3>Actividad reciente</h3></div><div id="recentActivity" class="timeline"></div></article>
+      </div>
+      <article class="panel integrated-panel"><div class="panel-head"><div><h3>Sistemas integrados</h3><p>Primera fase: acceso seguro mediante enlaces a sus dominios actuales.</p></div></div><div class="integrated-grid"><a class="system-card" href="https://saamir.ecomindsetgo.com" target="_blank" rel="noopener"><div class="system-icon">S</div><div><strong>SAAMIR</strong><span>Recepción, tarjetas, inventario y trazabilidad</span></div><b>↗</b></a><a class="system-card" href="https://samicert.ecomindsetgo.com" target="_blank" rel="noopener"><div class="system-icon">C</div><div><strong>SAMICERT</strong><span>Visto bueno, certificación, firma y verificación</span></div><b>↗</b></a></div></article>
+    </section>
+
+    <section class="view" id="view-devoluciones">
+      <div class="view-toolbar"><div><h2>Devolución de cargos</h2><p>Registro estructurado y generación del oficio institucional.</p></div><div class="toolbar-actions"><button class="secondary" id="btnHistory">Historial</button><button class="primary" id="btnNew">+ Nuevo oficio</button></div></div>
+      <div class="stepper"><span class="active">1 Datos</span><span>2 Dependencias</span><span>3 Observaciones</span><span>4 Vista previa</span></div>
+      <form id="officeForm" class="form-layout">
+        <article class="panel">
+          <div class="panel-head"><h3>Datos del oficio</h3><span class="badge">Automatizable</span></div>
+          <div class="form-grid">
+            <label>N.° de oficio<input id="officeNumber" placeholder="003-2026-OAD-CSJSA/PJ" required></label>
+            <label>Fecha del oficio<input id="officeDate" type="date" required></label>
+            <label>Destinatario<input id="recipient" placeholder="Nombre completo" required></label>
+            <label>Cargo / dependencia<input id="recipientRole" placeholder="Administrador / dependencia" required></label>
+            <label class="span-2">Referencia(s)<textarea id="references" rows="2" placeholder="Una referencia por línea"></textarea></label>
+            <label>Fecha de referencia<input id="referenceDate" type="date"></label>
+            <label>Tipo de cargo<select id="cargoType"><option value="digital">Cargos en digital</option><option value="fisico">Cargos</option></select></label>
+            <label>Paquete inicial<input id="rangeStart" placeholder="26-202"></label>
+            <label>Paquete final<input id="rangeEnd" placeholder="26-284"></label>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head"><div><h3>Dependencias y cantidades</h3><p>El sistema suma paquetes y expedientes automáticamente.</p></div><button type="button" class="secondary small" id="addDependency">+ Agregar</button></div>
+          <div class="table-wrap"><table><thead><tr><th>#</th><th>Juzgado / dependencia</th><th>Paquetes</th><th>Expedientes</th><th></th></tr></thead><tbody id="dependencyRows"></tbody><tfoot><tr><td colspan="2">TOTAL</td><td id="totalPackages">0</td><td id="totalFiles">0</td><td></td></tr></tfoot></table></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head"><div><h3>Expedientes observados</h3><p>Registra solo las incidencias que se devolverán u observarán.</p></div><button type="button" class="secondary small" id="addObservation">+ Agregar</button></div>
+          <div class="table-wrap"><table class="wide"><thead><tr><th>#</th><th>Dependencia</th><th>N.° expediente</th><th>Folios</th><th>Tipo</th><th>Observación</th><th></th></tr></thead><tbody id="observationRows"></tbody></table></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head"><div><h3>Paquetes observados</h3><p>Para casos donde la observación corresponde al paquete completo.</p></div><button type="button" class="secondary small" id="addPackageObservation">+ Agregar</button></div>
+          <div class="table-wrap"><table><thead><tr><th>#</th><th>Dependencia</th><th>Código de paquete</th><th>Folios</th><th>Observación</th><th></th></tr></thead><tbody id="packageObservationRows"></tbody></table></div>
+        </article>
+
+        <article class="panel summary-panel">
+          <div class="summary-cards"><div><span>Paquetes</span><strong id="sumPackages">0</strong></div><div><span>Expedientes</span><strong id="sumFiles">0</strong></div><div><span>Exp. observados</span><strong id="sumObs">0</strong></div><div><span>Paq. observados</span><strong id="sumPackObs">0</strong></div></div>
+          <div class="form-actions"><button type="button" class="secondary" id="btnSaveDraft">Guardar borrador</button><button type="button" class="primary" id="btnPreview">Generar vista previa</button></div>
+        </article>
+      </form>
+      <div id="historyPanel" class="panel hidden"><div class="panel-head"><h3>Historial de oficios</h3><button class="secondary small" id="closeHistory">Cerrar</button></div><div id="historyList"></div></div>
+    </section>
+
+    <section class="view placeholder" id="view-archivo360"><div class="empty-state"><span>⌖</span><h2>Archivo 360</h2><p>Siguiente módulo: mapa 2D interactivo de Sáenz Peña, NCPP–Sótano, López Padilla y Dunas.</p><div class="tag-row"><span>Repositorio</span><span>Sector</span><span>Estantería</span><span>Nivel</span><span>Rango</span></div></div></section>
+    <section class="view placeholder" id="view-transferencias"><div class="empty-state"><span>⇄</span><h2>Transferencias al Gobierno Regional</h2><p>Registro de fechas, cantidad de paquetes, metros lineales, documentación y estado del proceso.</p></div></section>
+    <section class="view placeholder" id="view-eliminacion"><div class="empty-state"><span>⌫</span><h2>Eliminación documental</h2><p>Registro estadístico de jornadas: paquetes, metros lineales, fechas, repositorios y documentos sustentatorios.</p></div></section>
+    <section class="view placeholder" id="view-reportes"><div class="empty-state"><span>▤</span><h2>Reportes</h2><p>Consolidado mensual/anual, exportación PDF/Excel y reportes por módulo.</p></div></section>
+    <section class="view placeholder" id="view-auditoria"><div class="empty-state"><span>◴</span><h2>Auditoría</h2><p>Registro transversal de usuario, fecha, hora, acción y cambios realizados.</p></div></section>
+    <section class="view placeholder" id="view-asistente"><div class="empty-state"><span>✦</span><h2>Asistente SIGAD</h2><p>Consultas estructuradas sin API de pago sobre la data registrada en SIGAD.</p></div></section>
+  </main>
+</div>
+
+<div class="modal" id="previewModal" aria-hidden="true">
+  <div class="modal-card modal-xl">
+    <div class="modal-head"><div><h3>Vista previa del oficio</h3><p>Revisa antes de generar o imprimir.</p></div><button id="closePreview" class="icon-btn">×</button></div>
+    <div id="officePreview" class="paper"></div>
+    <div class="modal-actions"><button id="btnPrint" class="secondary">Imprimir / Guardar PDF</button><button id="btnDownloadHtml" class="secondary">Descargar HTML</button><button id="btnFinalize" class="primary">Guardar como generado</button></div>
+  </div>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>

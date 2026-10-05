@@ -3,7 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#781d2a">
+  <meta name="theme-color" content="#7a0a24">
+  <meta name="description" content="SIGAD · Sistema Integral de Gestión del Archivo Desconcentrado">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
   <title>SIGAD · Archivo Desconcentrado</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,14 +20,14 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script defer src="js/vendor-jszip.min.js"></script>
+  <script defer src="js/archive360.js"></script>
   <script defer src="js/app.js"></script>
 </head>
 <body>
 <div class="app-shell">
   <aside class="sidebar" id="sidebar">
     <div class="brand">
-      <img src="assets/logo-pj.png" alt="Poder Judicial">
-      <div><strong>SIGAD</strong><span>Archivo Desconcentrado</span></div>
+      <img class="brand-logo" src="assets/logo-sigad.png" alt="SIGAD · Sistema Integral de Gestión del Archivo Desconcentrado">
     </div>
     <nav class="nav">
       <button class="nav-item active" data-view="dashboard"><span>▦</span>Dashboard</button>
@@ -35,20 +42,20 @@
       <a class="nav-item external" href="https://saamir.ecomindsetgo.com" target="_blank" rel="noopener"><span>▣</span>SAAMIR <b>↗</b></a>
       <a class="nav-item external" href="https://samicert.ecomindsetgo.com" target="_blank" rel="noopener"><span>✓</span>SAMICERT <b>↗</b></a>
     </nav>
-    <div class="sidebar-foot"><span class="dot local"></span><span id="storageStatus">Modo local seguro</span><small>SIGAD v0.2</small></div>
+    <div class="sidebar-foot"><span class="dot local"></span><span id="storageStatus">Modo local seguro</span><small>SIGAD v0.3 · UX/UI</small></div>
   </aside>
 
   <main class="main">
     <header class="topbar">
       <button class="menu-btn" id="menuBtn">☰</button>
       <div class="top-title"><h1 id="pageTitle">Dashboard</h1><p id="pageSub">Sistema Integral de Gestión del Archivo Desconcentrado</p></div>
-      <div class="top-actions"><button class="ghost" id="btnBackup">Respaldo</button><div class="user-chip"><span class="status-dot"></span><span>Archivo Desconcentrado</span></div></div>
+      <div class="top-actions"><button class="ghost top-action-btn" id="btnBackup" title="Respaldo y restauración">Respaldo</button><div class="user-chip"><span class="status-dot"></span><span>Archivo Desconcentrado</span></div></div>
     </header>
 
     <section class="view active" id="view-dashboard">
       <div class="hero">
-        <div><span class="eyebrow">CORTE SUPERIOR DE JUSTICIA DEL SANTA</span><h2>Centro de gestión del Archivo Desconcentrado</h2><p>Gestión operativa, trazabilidad, reportes y acceso unificado a SAAMIR y SAMICERT.</p></div>
-        <div class="hero-actions"><button class="primary" data-go="devoluciones">+ Nuevo oficio</button></div>
+        <div class="hero-copy"><span class="eyebrow">CORTE SUPERIOR DE JUSTICIA DEL SANTA</span><h2>Centro de gestión del Archivo Desconcentrado</h2><p>Gestión operativa, trazabilidad, ubicación documental, reportes y acceso unificado a SAAMIR y SAMICERT.</p><div class="hero-actions"><button class="primary" data-go="devoluciones">+ Nuevo oficio</button><button class="secondary" data-go="archivo360">Abrir Archivo 360</button></div></div>
+        <div class="hero-brand"><img src="assets/logo-sigad.png" alt="Logo SIGAD"></div>
       </div>
       <div class="stats" id="stats"></div>
       <div class="grid-2">
@@ -104,11 +111,53 @@
     </section>
 
     <section class="view" id="view-archivo360">
-      <div class="view-toolbar"><div><h2>Archivo 360</h2><p>Ubicación lógica de paquetes por repositorio y rangos configurables.</p></div><button class="primary" id="btnAddRange">+ Registrar rango</button></div>
-      <article class="search-hero"><div><span class="eyebrow">LOCALIZADOR</span><h3>¿Dónde se encuentra el paquete?</h3></div><div class="search-box"><input id="packageSearch" placeholder="Ej.: 14572R o 26-458"><button id="btnPackageSearch" class="primary">Buscar</button></div></article>
-      <div id="locationResult"></div>
+      <div class="view-toolbar">
+        <div><span class="eyebrow">LOCALIZACIÓN DOCUMENTAL</span><h2>Archivo 360</h2><p>Encuentre un paquete, identifique su anaquel y obtenga la ruta física cuando el repositorio tenga plano parametrizado.</p></div>
+        <div class="toolbar-actions"><button class="secondary" id="btnAddRange">+ Configurar rango</button></div>
+      </div>
+
+      <article class="panel a360-search-panel">
+        <div class="a360-repo-tabs" aria-label="Repositorios">
+          <button type="button" class="a360-repo-tab is-active" data-repo="Dunas">Dunas</button>
+          <button type="button" class="a360-repo-tab" data-repo="Sáenz Peña">Sáenz Peña</button>
+          <button type="button" class="a360-repo-tab" data-repo="NCPP - Sótano">NCPP · Sótano</button>
+          <button type="button" class="a360-repo-tab" data-repo="López Padilla">López Padilla</button>
+        </div>
+        <div class="a360-search-row">
+          <div class="a360-search-copy"><span>Buscar paquete</span><strong>Escriba el código exactamente como figura en el paquete.</strong></div>
+          <div class="search-box a360-search-box"><input id="packageSearch" placeholder="Ej.: 504-22T, 14572R o 26-458" autocomplete="off" aria-label="Código de paquete"><button id="btnPackageSearch" class="primary">Buscar ubicación</button></div>
+        </div>
+        <div class="a360-search-foot"><div id="archiveExamples" class="a360-examples"></div><label class="a360-switch"><input type="checkbox" id="showNumberFlow" checked><span>Mostrar sentido de numeración</span></label></div>
+      </article>
+
+      <div class="a360-stats" id="archiveStats"></div>
+
+      <div class="archive-grid">
+        <article class="panel a360-plan-card" id="archivePlanCard">
+          <div class="panel-head a360-plan-head">
+            <div><h3 id="archivePlanTitle">Repositorio Dunas</h3><p id="archivePlanSub">Plano interactivo activo</p></div>
+            <div class="a360-plan-actions"><span id="archivePlanBadge" class="badge badge-success">Plano interactivo</span><button type="button" class="icon-tool" id="zoomOut" title="Alejar">−</button><span id="archiveZoomLabel" class="zoom-label">100%</span><button type="button" class="icon-tool" id="zoomIn" title="Acercar">+</button><button type="button" class="icon-tool" id="zoomReset" title="Restablecer zoom">↺</button><button type="button" class="icon-tool" id="zoomFullscreen" title="Pantalla completa">⛶</button></div>
+          </div>
+          <div class="a360-plan-stage"><svg id="archivePlan" viewBox="395 235 370 530" role="img" aria-label="Plano interactivo de Archivo 360"></svg></div>
+          <div class="a360-legend"><span><i class="legend-dot current"></i>Usted está aquí</span><span><i class="legend-dot route"></i>Ruta</span><span><i class="legend-dot destination"></i>Destino</span><span><i class="legend-dot shelf"></i>Anaquel</span></div>
+        </article>
+
+        <aside class="archive-side">
+          <div id="archiveResult" aria-live="polite"></div>
+          <article class="panel a360-help">
+            <div class="panel-head"><div><h3>Cómo funciona</h3><p>Archivo 360 combina rangos y plano físico.</p></div></div>
+            <div class="a360-help-list"><div><b>1</b><span>Busque el código del paquete.</span></div><div><b>2</b><span>El sistema identifica el repositorio y rango.</span></div><div><b>3</b><span>En Dunas calcula anaquel, balda y ruta desde el portón.</span></div></div>
+          </article>
+        </aside>
+      </div>
+
       <div class="repo-grid" id="repoGrid"></div>
-      <article class="panel"><div class="panel-head"><div><h3>Rangos configurados</h3><p>Base del motor de ubicación. Se puede ampliar luego a pasillo, estantería y nivel.</p></div></div><div id="rangeList"></div></article>
+
+      <article class="panel">
+        <div class="panel-head"><div><h3>Configuración de rangos</h3><p>Estos rangos permiten localizar paquetes aun cuando todavía no se haya cargado el plano físico del repositorio.</p></div><button class="secondary small" id="btnAddRangeInline">+ Registrar rango</button></div>
+        <div class="range-table-head"><span>Repositorio</span><span>Serie</span><span>Desde</span><span>Hasta</span><span>Sector</span><span>Estantería</span><span>Nivel</span><span></span></div>
+        <div id="rangeList"></div>
+      </article>
     </section>
 
     <section class="view" id="view-transferencias">
@@ -135,10 +184,12 @@
 
     <section class="view" id="view-asistente">
       <div class="view-toolbar"><div><h2>Asistente SIGAD</h2><p>Consultas gratuitas basadas en los registros de esta plataforma.</p></div></div>
-      <div class="assistant-layout"><article class="panel assistant-panel"><div id="assistantMessages" class="assistant-messages"></div><div class="assistant-input"><input id="assistantQuery" placeholder="Ej.: ¿Cuántos paquetes hemos eliminado este año?"><button id="btnAsk" class="primary">Consultar</button></div><div class="suggestions"><button>¿Cuántos oficios se generaron?</button><button>¿Cuántos paquetes se transfirieron?</button><button>¿Cuántos metros lineales se eliminaron?</button><button>¿Dónde está el paquete 14572R?</button></div></article><article class="panel"><div class="panel-head"><h3>Qué puede consultar</h3></div><div class="capability-list"><span>Oficios y cargos</span><span>Paquetes y expedientes registrados</span><span>Observaciones frecuentes</span><span>Transferencias</span><span>Eliminaciones y metros lineales</span><span>Ubicación por rangos de Archivo 360</span></div></article></div>
+      <div class="assistant-layout"><article class="panel assistant-panel"><div id="assistantMessages" class="assistant-messages"></div><div class="assistant-input"><input id="assistantQuery" placeholder="Ej.: ¿Cuántos paquetes hemos eliminado este año?"><button id="btnAsk" class="primary">Consultar</button></div><div class="suggestions"><button>¿Cuántos oficios se generaron?</button><button>¿Cuántos paquetes se transfirieron?</button><button>¿Cuántos metros lineales se eliminaron?</button><button>¿Dónde está el paquete 504-22T?</button><button>¿Dónde está el paquete 14572R?</button></div></article><article class="panel"><div class="panel-head"><h3>Qué puede consultar</h3></div><div class="capability-list"><span>Oficios y cargos</span><span>Paquetes y expedientes registrados</span><span>Observaciones frecuentes</span><span>Transferencias</span><span>Eliminaciones y metros lineales</span><span>Ubicación por rangos de Archivo 360</span></div></article></div>
     </section>
   </main>
 </div>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
 <div class="modal" id="previewModal" aria-hidden="true">
   <div class="modal-card modal-xl">

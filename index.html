@@ -9,65 +9,50 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon-192.png">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="apple-touch-icon" href="assets/icon-192.png">
   <title>SIGAD · Archivo Desconcentrado</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/app.css">
+  <link rel="stylesheet" href="assets/dashboard.css">
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script defer src="js/vendor-jszip.min.js"></script>
   <script defer src="js/archive360.js"></script>
   <script defer src="js/app.js"></script>
+  <script defer src="js/dashboard.js"></script>
 </head>
-<body>
+<body><svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs><filter id="logo-alpha" color-interpolation-filters="sRGB"><feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="light"/><feComponentTransfer in="light" result="mask"><feFuncA type="table" tableValues="1 0"/></feComponentTransfer><feComposite in="SourceGraphic" in2="mask" operator="in"/></filter></defs></svg>
+
 <div class="app-shell">
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       <img class="brand-logo" src="assets/logo-sigad.png" alt="SIGAD · Sistema Integral de Gestión del Archivo Desconcentrado">
     </div>
-    <nav class="nav">
-      <button class="nav-item active" data-view="dashboard"><span>▦</span>Dashboard</button>
-      <button class="nav-item" data-view="devoluciones"><span>✉</span>Devolución de cargos</button>
-      <button class="nav-item" data-view="archivo360"><span>⌖</span>Archivo 360</button>
-      <button class="nav-item" data-view="transferencias"><span>⇄</span>Transferencias</button>
-      <button class="nav-item" data-view="eliminacion"><span>⌫</span>Eliminación documental</button>
-      <button class="nav-item" data-view="reportes"><span>▤</span>Reportes</button>
-      <button class="nav-item" data-view="auditoria"><span>◴</span>Auditoría</button>
-      <button class="nav-item" data-view="asistente"><span>✦</span>Asistente</button>
-      <div class="nav-label">Sistemas integrados</div>
-      <a class="nav-item external" href="https://saamir.ecomindsetgo.com" target="_blank" rel="noopener"><span>▣</span>SAAMIR <b>↗</b></a>
-      <a class="nav-item external" href="https://samicert.ecomindsetgo.com" target="_blank" rel="noopener"><span>✓</span>SAMICERT <b>↗</b></a>
-    </nav>
-    <div class="sidebar-foot"><span class="dot local"></span><span id="storageStatus">Modo local seguro</span><small>SIGAD v0.3 · UX/UI</small></div>
+<nav class="nav" aria-label="Menú principal"><button class="nav-item active" data-view="dashboard"><span data-icon="home"></span>Dashboard</button><button class="nav-item " data-view="devoluciones"><span data-icon="file"></span>Devolución de Cargos</button><button class="nav-item " data-view="archivo360"><span data-icon="map"></span>Archivo 360</button><button class="nav-item " data-view="transferencias"><span data-icon="truck"></span>Transferencias</button><button class="nav-item " data-view="eliminacion"><span data-icon="trash"></span>Eliminación Documental</button><a class="nav-item external" href="https://saamir.ecomindsetgo.com" target="_blank" rel="noopener"><span data-icon="box"></span>SAAMIR<b>↗</b></a><a class="nav-item external" href="https://samicert.ecomindsetgo.com" target="_blank" rel="noopener"><span data-icon="box"></span>SAMICERT<b>↗</b></a><button class="nav-item " data-view="reportes"><span data-icon="chart"></span>Reportes</button><button class="nav-item " data-view="auditoria"><span data-icon="shield"></span>Auditoría</button><button class="nav-item " data-view="asistente"><span data-icon="bot"></span>Asistente IA</button><button class="nav-item " data-view="configuracion"><span data-icon="settings"></span>Configuración</button></nav><button class="sidebar-user" data-go="configuracion"><span class="avatar" data-icon="user"></span><span><strong class="profile-name">Alfredo Cruzado</strong><small>Perfil local</small></span><b>›</b></button>    <div class="sidebar-foot"><span class="dot local"></span><span id="storageStatus">Datos en este navegador</span><small>SIGAD v0.4 · Archivo Desconcentrado</small></div>
   </aside>
 
   <main class="main">
     <header class="topbar">
-      <button class="menu-btn" id="menuBtn">☰</button>
-      <div class="top-title"><h1 id="pageTitle">Dashboard</h1><p id="pageSub">Sistema Integral de Gestión del Archivo Desconcentrado</p></div>
-      <div class="top-actions"><button class="ghost top-action-btn" id="btnBackup" title="Respaldo y restauración">Respaldo</button><div class="user-chip"><span class="status-dot"></span><span>Archivo Desconcentrado</span></div></div>
+      <button class="menu-btn icon-control" id="menuBtn" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false" data-icon="menu"></button>
+      <a class="wordmark" href="#" id="brandHome">SIGAD</a><div class="top-title"><h1 id="pageTitle">Dashboard</h1><p id="pageSub">Sistema Integral de Gestión del Archivo Desconcentrado</p></div>
+      <button class="search-trigger" id="searchTrigger"><span data-icon="search"></span><span>Buscar en todo el sistema...</span><kbd>Ctrl K</kbd></button>
+      <div class="top-actions"><button class="icon-control" id="themeToggle" aria-label="Cambiar tema" data-icon="sun"></button><button class="icon-control" id="notificationToggle" aria-label="Actividad reciente" data-icon="bell"></button><button class="profile-chip" data-go="configuracion"><span class="avatar" data-icon="user"></span><span><strong class="profile-name">Alfredo Cruzado</strong><small>Perfil local</small></span></button><button id="openAssistant" class="icon-control" aria-label="Abrir asistente" data-icon="bot"></button><button class="hidden" id="btnBackup">Respaldo</button></div>
     </header>
-
     <section class="view active" id="view-dashboard">
-      <div class="hero">
-        <div class="hero-copy"><span class="eyebrow">CORTE SUPERIOR DE JUSTICIA DEL SANTA</span><h2>Centro de gestión del Archivo Desconcentrado</h2><p>Gestión operativa, trazabilidad, ubicación documental, reportes y acceso unificado a SAAMIR y SAMICERT.</p><div class="hero-actions"><button class="primary" data-go="devoluciones">+ Nuevo oficio</button><button class="secondary" data-go="archivo360">Abrir Archivo 360</button></div></div>
-        <div class="hero-brand"><img src="assets/logo-sigad.png" alt="Logo SIGAD"></div>
-      </div>
+      <div class="dashboard-heading"><div><h2>Bienvenido, <span id="welcomeName">Alfredo</span></h2><p>Resumen general de la gestión del Archivo Desconcentrado</p></div><label class="period-control">Periodo<select id="dashboardYear" aria-label="Periodo del dashboard"></select></label></div>
       <div class="stats" id="stats"></div>
-      <div class="grid-2">
-        <article class="panel"><div class="panel-head"><div><h3>Módulos operativos</h3><p>Acceso rápido a cada proceso.</p></div></div><div class="module-grid" id="moduleGrid"></div></article>
-        <article class="panel"><div class="panel-head"><div><h3>Actividad reciente</h3><p>Últimas acciones registradas.</p></div></div><div id="recentActivity" class="timeline"></div></article>
-      </div>
-      <div class="grid-2">
-        <article class="panel"><div class="panel-head"><div><h3>Observaciones frecuentes</h3><p>Acumulado de devoluciones registradas.</p></div></div><div id="obsRanking" class="bars"></div></article>
-        <article class="panel"><div class="panel-head"><div><h3>Sistemas integrados</h3><p>Fase 1: acceso directo conservando sus plataformas actuales.</p></div></div><div class="integrated-grid"><a class="system-card" href="https://saamir.ecomindsetgo.com" target="_blank" rel="noopener"><div class="system-icon">S</div><div><strong>SAAMIR</strong><span>Recepción, tarjetas y trazabilidad</span></div><b>↗</b></a><a class="system-card" href="https://samicert.ecomindsetgo.com" target="_blank" rel="noopener"><div class="system-icon">C</div><div><strong>SAMICERT</strong><span>VB, certificación, firma y verificación</span></div><b>↗</b></a></div></article>
+      <div class="dashboard-grid">
+        <article class="panel activity-panel"><div class="panel-head"><h3>Actividad mensual</h3><select id="chartMetric" aria-label="Métrica del gráfico"><option value="packages">Paquetes</option><option value="records">Registros</option></select></div><div id="monthlyChart"></div><div class="chart-legend"><span style="--series:#a70038">Devoluciones</span><span style="--series:#0984d7">Transferencias</span><span style="--series:#1daa57">Eliminaciones</span></div><p class="data-caption">Solo oficios generados y procesos concluidos en el periodo.</p></article>
+        <article class="panel repository-panel"><div class="panel-head"><h3>Distribución por repositorio</h3></div><div id="repositoryChart"></div><p class="data-caption">Cobertura de rangos configurados y plano Dunas. No es inventario físico; no depende del periodo.</p></article>
+        <article class="panel modules-panel"><div class="panel-head"><h3>Acceso rápido a módulos</h3></div><div class="module-grid" id="moduleGrid"></div></article>
+        <article class="panel recent-panel"><div class="panel-head"><h3>Actividad reciente</h3><button class="text-button" data-go="auditoria">Ver todo</button></div><div id="recentActivity" class="timeline"></div></article>
+        <article class="panel observations-panel"><div class="panel-head"><h3>Indicadores de observaciones <small>(devolución de cargos)</small></h3></div><div class="observations-layout"><div id="observationGauge"></div><div><h4>Principales causas</h4><div id="obsRanking" class="bars"></div></div></div></article>
       </div>
     </section>
-
     <section class="view" id="view-devoluciones">
       <div class="view-toolbar"><div><h2>Devolución de cargos</h2><p>Registro estructurado, observaciones y generación del oficio institucional.</p></div><div class="toolbar-actions"><button class="secondary" id="btnHistory">Historial</button><button class="primary" id="btnNew">+ Nuevo oficio</button></div></div>
       <div class="stepper"><span class="active">1 Datos</span><span>2 Dependencias</span><span>3 Observaciones</span><span>4 Documento</span></div>
@@ -182,12 +167,17 @@
       <article class="panel"><div class="filter-row"><input id="auditSearch" placeholder="Buscar acción o detalle"><select id="auditLimit"><option value="50">50 registros</option><option value="100">100 registros</option><option value="500">500 registros</option></select></div><div id="auditList"></div></article>
     </section>
 
-    <section class="view" id="view-asistente">
-      <div class="view-toolbar"><div><h2>Asistente SIGAD</h2><p>Consultas gratuitas basadas en los registros de esta plataforma.</p></div></div>
-      <div class="assistant-layout"><article class="panel assistant-panel"><div id="assistantMessages" class="assistant-messages"></div><div class="assistant-input"><input id="assistantQuery" placeholder="Ej.: ¿Cuántos paquetes hemos eliminado este año?"><button id="btnAsk" class="primary">Consultar</button></div><div class="suggestions"><button>¿Cuántos oficios se generaron?</button><button>¿Cuántos paquetes se transfirieron?</button><button>¿Cuántos metros lineales se eliminaron?</button><button>¿Dónde está el paquete 504-22T?</button><button>¿Dónde está el paquete 14572R?</button></div></article><article class="panel"><div class="panel-head"><h3>Qué puede consultar</h3></div><div class="capability-list"><span>Oficios y cargos</span><span>Paquetes y expedientes registrados</span><span>Observaciones frecuentes</span><span>Transferencias</span><span>Eliminaciones y metros lineales</span><span>Ubicación por rangos de Archivo 360</span></div></article></div>
-    </section>
+    <section class="view" id="view-configuracion"><div class="view-toolbar"><div><h2>Configuración</h2><p>Personalice la interfaz y administre sus respaldos.</p></div></div><article class="panel"><h3>Perfil de este navegador</h3><form id="profileForm" class="form-grid"><label>Nombre para mostrar<input id="profileName" maxlength="80" required value="Alfredo Cruzado"></label><div><button class="primary" type="submit">Guardar nombre</button></div></form><p>Este perfil personaliza la pantalla; no representa una cuenta autenticada.</p></article><article class="panel"><h3>Datos y respaldo</h3><p>Los registros se guardan en este navegador. Descargue un respaldo antes de borrar datos del navegador o cambiar de equipo.</p><button id="settingsBackup" class="primary">Respaldo y restauración</button></article><article class="panel"><h3>Sistemas externos</h3><p>SAAMIR y SAMICERT se abren en sus sitios actuales. Sus indicadores requieren una integración de datos que no está configurada.</p></article></section>
   </main>
+<aside id="assistantRail" class="assistant-rail" aria-label="Asistente SIGAD">
+  <div class="assistant-heading"><span class="bot-emblem" data-icon="bot"></span><div><h2>Asistente SIGAD <span class="beta">BETA</span></h2><p>Consulta la información del Archivo</p></div><button id="closeAssistant" class="icon-control" aria-label="Minimizar asistente">−</button></div>
+  <div id="assistantMessages" class="assistant-messages" role="log" aria-live="polite" aria-label="Conversación"></div>
+  <form id="assistantForm" class="assistant-input"><label class="sr-only" for="assistantQuery">Consulta sobre el Archivo</label><input id="assistantQuery" placeholder="Escribe tu consulta sobre el Archivo..." maxlength="1000" autocomplete="off"><button id="btnAsk" class="primary" type="submit" aria-label="Enviar consulta" data-icon="send"></button></form>
+  <p class="assistant-disclaimer">Asistente local basado en los registros de SIGAD.<br>Verifica siempre el documento de origen.</p>
+</aside>
 </div>
+<div id="assistantBackdrop" class="assistant-backdrop"></div>
+<dialog id="searchDialog" class="search-dialog"><div class="search-dialog-head"><span data-icon="search"></span><input id="globalSearch" placeholder="Buscar oficio, dependencia, paquete o módulo" aria-label="Buscar en SIGAD" autocomplete="off"><button class="icon-control" id="closeSearch" aria-label="Cerrar búsqueda">×</button></div><div id="searchResults"></div><p>Busca en los registros de este navegador. Esc para cerrar.</p></dialog>
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
